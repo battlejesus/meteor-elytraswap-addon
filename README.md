@@ -4,4 +4,4 @@ You can bind a key for swap between elytra and chestplate.
 
 On some servers, due to an unknown issue, the existing 'Chest Swap' system only allowed unequipping the chestplate to put on the elytra, but it didn't work the other way around. This flaw rendered the 'Chest Swap' module completely useless. To fix this problem, I designed a module that allows you to easily toggle back and forth between the elytra and the chestplate with a single keybind
 
-<img width="869" height="377" alt="Adsız" src="https://github.com/user-attachments/assets/02ddb023-8085-493b-90d1-4e13674b59ce" />
+<img width="789" height="375" alt="Adsız" src="https://github.com/user-attachments/assets/def0a6d8-12ba-4ca6-ab42-2b091035d154" />
