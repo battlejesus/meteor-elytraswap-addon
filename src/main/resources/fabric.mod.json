@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "elytraswap",
+  "version": "${version}",
+  "name": "Elytra Swap",
+  "description": "Keybind ile Elytra ve Chestplate arasında hızlı swap yapar.",
+  "authors": ["Anonymous"],
+  "contact": {
+    "sources": "https://github.com/battlejesus/meteor-elytraswap-addon"
+  },
+  "icon": "assets/elytraswap/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "meteor": [
+      "com.elytraswap.ElytraSwapAddon"
+    ]
+  },
+  "mixins": [
+    "elytraswap.mixins.json"
+  ],
+  "custom": {
+    "meteor-client:color": "0,255,200",
+    "modmenu": {
+      "parent": {
+        "id": "meteor-client"
+      }
+    }
+  },
+  "depends": {
+    "java": ">=${jdk_version}",
+    "minecraft": "${minecraft_version}",
+    "meteor-client": "*"
+  }
+}
