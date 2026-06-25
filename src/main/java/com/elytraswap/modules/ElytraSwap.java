@@ -23,22 +23,22 @@ public class ElytraSwap extends Module {
 
     private final Setting<Boolean> closeInventory = sgGeneral.add(new BoolSetting.Builder()
         .name("close-inventory")
-        .description("Swap işleminden sonra envanteri otomatik kapatır.")
+        .description("It automatically closes the inventory after the swap transaction.")
         .defaultValue(true)
         .build()
     );
 
     private final Setting<Boolean> preferNetherite = sgGeneral.add(new BoolSetting.Builder()
         .name("prefer-netherite")
-        .description("Mümkünse Netherite Chestplate'i tercih eder.")
+        .description("If possible, he prefers the Netherite Chestplate.")
         .defaultValue(true)
         .build()
     );
 
     public final Setting<Keybind> swapKey = sgGeneral.add(new KeybindSetting.Builder()
         .name("swap-key")
-        .description("Elytra ↔ Chestplate swap için tuş atayın.")
-        .defaultValue(Keybind.fromKey(88)) // Varsayılan: X
+        .description("Key to bind for Elytra ↔ Chestplate swap.")
+        .defaultValue(Keybind.fromKey(88)) // Default: X
         .build()
     );
 
@@ -46,7 +46,7 @@ public class ElytraSwap extends Module {
 
     public ElytraSwap() {
         /*super(ElytraSwapAddon.CATEGORY, "elytra-swap", "Tuşa basıldığında Elytra ile Chestplate arasında hızlı swap yapar, Swap key kullanın bind kullanmayın.");*/
-        super(Categories.Player, "elytra-swap", "Tuşa basıldığında Elytra ile Chestplate arasında hızlı swap yapar, Swap key kullanın bind kullanmayın.");
+        super(Categories.Player, "elytra-swap", "Press the key to quickly swap between Elytra and Chestplate, use the swap key, not the bind.");
     }
 
     @EventHandler
