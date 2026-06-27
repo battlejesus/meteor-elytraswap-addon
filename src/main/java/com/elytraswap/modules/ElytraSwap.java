@@ -10,11 +10,12 @@ import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.misc.Keybind;
 import meteordevelopment.meteorclient.utils.player.InvUtils;
 import meteordevelopment.orbit.EventHandler;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
 import meteordevelopment.meteorclient.systems.modules.Categories;
 
 public class ElytraSwap extends Module {
@@ -63,8 +64,8 @@ public class ElytraSwap extends Module {
     private void performSwap() {
         if (mc.player == null) return;
 
-        ItemStack chestStack = mc.player.getItemBySlot(EquipmentSlot.CHEST);
-        boolean isElytraEquipped = chestStack.has(DataComponents.GLIDER);
+        ItemStack chestStack = mc.player.getEquippedStack(EquipmentSlot.CHEST);
+        boolean isElytraEquipped = chestStack.contains(DataComponentTypes.GLIDER);
 
         if (isElytraEquipped) {
             equipBestChestplate();
@@ -101,10 +102,10 @@ public class ElytraSwap extends Module {
         }
     }
 
-    private int findItem(net.minecraft.world.item.Item item) {
+    private int findItem(Item item) {
         var inv = mc.player.getInventory();
-        for (int i = 0; i < inv.getNonEquipmentItems().size(); i++) {
-            if (inv.getNonEquipmentItems().get(i).is(item)) {
+        for (int i = 0; i < inv.size(); i++) {
+            if (inv.getStack(i).isOf(item)) {
                 return i;
             }
         }
@@ -113,9 +114,9 @@ public class ElytraSwap extends Module {
 
     private int findElytra() {
         var inv = mc.player.getInventory();
-        for (int i = 0; i < inv.getNonEquipmentItems().size(); i++) {
-            ItemStack stack = inv.getNonEquipmentItems().get(i);
-            if (stack.has(DataComponents.GLIDER)) {
+        for (int i = 0; i < inv.size(); i++) {
+            ItemStack stack = inv.getStack(i);
+            if (stack.contains(DataComponentTypes.GLIDER)) {
                 return i;
             }
         }
@@ -124,8 +125,8 @@ public class ElytraSwap extends Module {
 
     private int findAnyChestplate() {
         var inv = mc.player.getInventory();
-        for (int i = 0; i < inv.getNonEquipmentItems().size(); i++) {
-            ItemStack stack = inv.getNonEquipmentItems().get(i);
+        for (int i = 0; i < inv.size(); i++) {
+            ItemStack stack = inv.getStack(i);
             if (isChestplate(stack)) {
                 return i;
             }
@@ -135,19 +136,21 @@ public class ElytraSwap extends Module {
 
     private boolean isChestplate(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        return stack.is(Items.NETHERITE_CHESTPLATE) ||
-               stack.is(Items.DIAMOND_CHESTPLATE) ||
-               stack.is(Items.IRON_CHESTPLATE) ||
-               stack.is(Items.GOLDEN_CHESTPLATE) ||
-               stack.is(Items.CHAINMAIL_CHESTPLATE) ||
-               stack.is(Items.LEATHER_CHESTPLATE);
+        return stack.isOf(Items.NETHERITE_CHESTPLATE) ||
+               stack.isOf(Items.DIAMOND_CHESTPLATE) ||
+               stack.isOf(Items.IRON_CHESTPLATE) ||
+               stack.isOf(Items.GOLDEN_CHESTPLATE) ||
+               stack.isOf(Items.CHAINMAIL_CHESTPLATE) ||
+               stack.isOf(Items.LEATHER_CHESTPLATE);
     }
 
     private void equip(int slot) {
         InvUtils.move().from(slot).toArmor(2);
 
-        if (closeInventory.get() && mc.screen != null) {
-            mc.getConnection().send(new ServerboundContainerClosePacket(mc.player.containerMenu.containerId));
+        if (closeInventory.get() && mc.currentScreen != null) {
+            if (mc.getNetworkHandler() != null) {
+                mc.getNetworkHandler().sendPacket(new CloseHandledScreenC2SPacket(mc.player.currentScreenHandler.syncId));
+            }
         }
     }
 }
