@@ -53,7 +53,8 @@ public class ElytraSwap extends Module {
     private void onTick(TickEvent.Post event) {
         boolean isPressed = swapKey.get().isPressed();
 
-        if (isPressed && !wasPressed) {
+        // Sadece mc.screen null ise (yani chat veya envanter açık değilse) tetiklenir
+        if (mc.screen == null && isPressed && !wasPressed) {
             performSwap();
         }
 
